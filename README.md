@@ -1,6 +1,6 @@
 # DataPrivacyShield 🛡️
 
-A lightweight and easy-to-use Python utility class designed to help data scientists and engineers apply data desensitization, anonymization, and privacy protection techniques to their datasets. Built on top of `pandas`, it allows you to process sensitive information while retaining the analytical value of your data.
+A lightweight and easy-to-use Python utility class designed to help users assess and improve the privacy of sensitive datasets while also making governance and compliance considerations more explicit. Built on top of `pandas`, it allows you to process sensitive information while retaining the analytical value of your data.
 
 ## ✨ Features
 
