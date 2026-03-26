@@ -22,7 +22,7 @@ A lightweight and easy-to-use Python utility class designed to help users assess
 
 ```python
 import pandas as pd
-from privacy_shield import DataPrivacyShield  # Assuming you save the class in privacy_shield.py
+from privacy_shield import DataPrivacyShield  # Assuming you have downloaded privacy_shield.py
 
 # 1. Load your dataset (from a CSV path or an existing DataFrame)
 df = pd.DataFrame({
