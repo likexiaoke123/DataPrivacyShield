@@ -1,7 +1,6 @@
 import pandas as pd
 import hashlib
 
-
 class DataPrivacyShield:
     def __init__(self, data):
         """
@@ -94,7 +93,35 @@ class DataPrivacyShield:
         self.processed_columns.update(quasi_identifiers)
 
         removed_count = self.original_row_count - len(self.df)
-        print(f"✅ {k}-Anonymity applied. Suppressed (removed) {removed_count} records to meet conditions.")
+        print(f"✅ {k}-Anonymity applied. Total suppressed records so far: {removed_count}")
+
+    # ==========================================
+    # NEW METHOD: L-Diversity
+    # ==========================================
+    def apply_l_diversity(self, quasi_identifiers, sensitive_column, l):
+        """
+        Method 5: L-Diversity (Suppression).
+        Ensures every equivalence class (quasi-identifier group) has at least 'l' 
+        distinct values for the specified sensitive attribute.
+        Rows in groups that fail this condition are suppressed (removed) to prevent
+        homogeneity attacks.
+        """
+        if sensitive_column not in self.df.columns:
+            print(f"❌ Error: Sensitive column '{sensitive_column}' not found.")
+            return
+
+        # Calculate the number of distinct sensitive values for each group
+        distinct_counts = self.df.groupby(quasi_identifiers)[sensitive_column].nunique().reset_index(name='distinct_count')
+
+        # Filter groups that meet the l-diversity requirement
+        valid_groups = distinct_counts[distinct_counts['distinct_count'] >= l]
+
+        # Keep only the rows that belong to valid, l-diverse groups
+        self.df = self.df.merge(valid_groups[quasi_identifiers], on=quasi_identifiers, how='inner')
+        self.processed_columns.add(sensitive_column)
+
+        removed_count = self.original_row_count - len(self.df)
+        print(f"✅ {l}-Diversity applied on '{sensitive_column}'. Total suppressed records so far: {removed_count}")
 
     def calculate_privacy_score(self, quasi_identifiers=None):
         """
